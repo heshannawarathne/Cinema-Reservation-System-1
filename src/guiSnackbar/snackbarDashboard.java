@@ -5,6 +5,7 @@
 package guiSnackbar;
 
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import guiCashier.SnackCashierDashboard;
 
 import java.awt.BorderLayout;
 import java.sql.Connection;
@@ -408,20 +409,22 @@ public class snackbarDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        snack_GRN sg=new snack_GRN();
+        snack_GRN sg = new snack_GRN();
         sg.setVisible(true);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         jPanel3.removeAll();
         
-       Snackcompany sc=new Snackcompany();
+        Snackcompany sc = new Snackcompany();
         jPanel3.add(sc, BorderLayout.CENTER);
-        SwingUtilities.updateComponentTreeUI(jPanel3); 
+        SwingUtilities.updateComponentTreeUI(jPanel3);        
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        guiCashier.SnackCashierDashboard sc = new SnackCashierDashboard();
+        sc.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
