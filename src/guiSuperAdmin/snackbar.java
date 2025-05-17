@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 import model.mySQL;
+import model.snackGrnitem;
 
 /**
  *
@@ -25,27 +26,62 @@ public class snackbar extends javax.swing.JPanel {
         loadCompanies();
         loadProduct();
         hint();
+        loadGRNItem("");
     }
-    
+
     private void hint() {
         if (jTextField14 != null) {
             jTextField14.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Number");
-        }if (jTextField19 != null) {
+        }
+        if (jTextField19 != null) {
             jTextField19.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Number");
-        }if (jTextField15 != null) {
+        }
+        if (jTextField15 != null) {
             jTextField15.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Number");
-        }if (jTextField16 != null) {
+        }
+        if (jTextField16 != null) {
             jTextField16.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Number");
-        }if (jTextField17 != null) {
-            jTextField17.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Number");
-        }if (jTextField18 != null) {
+        }
+        if (jTextField17 != null) {
+            jTextField17.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Brand Name");
+        }
+        if (jTextField18 != null) {
             jTextField18.putClientProperty(FlatClientProperties.PLACEHOLDER_TEXT, "Number");
         }
-        
 
     }
 
-    
+    private void loadGRNItem(String name) {
+
+        try {
+            ResultSet resultSet = mySQL.executeSearch("SELECT * FROM `snack_product` "
+                    + "INNER JOIN `brand`ON `snack_product`.`brand_id`= `brand`.`id` "
+                    + "INNER JOIN `snack_stock` ON `snack_product`.`id`=`snack_stock`.`snack_product_id`"
+                    + "INNER JOIN `grn_item` ON `grn_item`.`snack_stock_id` =`snack_stock`.`id`WHERE `name` LIKE '" + name + "%'");
+
+            DefaultTableModel model = (DefaultTableModel) jTable5.getModel();
+            model.setRowCount(0);
+
+            while (resultSet.next()) {
+                Vector<String> vector = new Vector<>();
+                vector.add(resultSet.getString("id"));
+                vector.add(resultSet.getString("product"));
+                vector.add(resultSet.getString("brand.name"));
+                vector.add(resultSet.getString("snack_stock.qty"));
+                vector.add(resultSet.getString("grn_item.buying_price"));
+                vector.add(resultSet.getString("snack_stock.selling_price"));
+                vector.add(resultSet.getString("snack_stock.mfd"));
+                vector.add(resultSet.getString("snack_stock.exp"));
+
+                model.addRow(vector);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private void loadProduct() {
         try {
             ResultSet resultSet = mySQL.executeSearch("SELECT * FROM snack_product "
@@ -68,38 +104,37 @@ public class snackbar extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
-     private void loadCompanies() {
+
+    private void loadCompanies() {
         try {
-            
+
             ResultSet resultSet = mySQL.executeSearch("SELECT * FROM `company`");
-            
+
             DefaultTableModel defaultTableModel = (DefaultTableModel) jTable3.getModel();
             defaultTableModel.setRowCount(0);
-            
+
             while (resultSet.next()) {
                 Vector<String> vector = new Vector<>();
                 vector.add(resultSet.getString("id"));
                 vector.add(resultSet.getString("name"));
                 vector.add(resultSet.getString("hotline"));
-                
+
                 defaultTableModel.addRow(vector);
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
     }
 
-    
     private void loadSuppliers() {
         try {
             ResultSet resultSet = mySQL.executeSearch("SELECT * FROM `snack_supplier`");
-                    
-            DefaultTableModel defaultTableModel =  (DefaultTableModel) jTable1.getModel();
+
+            DefaultTableModel defaultTableModel = (DefaultTableModel) jTable1.getModel();
             defaultTableModel.setRowCount(0);
-            
+
             while (resultSet.next()) {
                 Vector<String> vector = new Vector<>();
                 vector.add(resultSet.getString("mobile"));
@@ -107,15 +142,15 @@ public class snackbar extends javax.swing.JPanel {
                 vector.add(resultSet.getString("lname"));
                 vector.add(resultSet.getString("email"));
                 vector.add(resultSet.getString("company_id"));
-                
-              defaultTableModel.addRow(vector);
-                
+
+                defaultTableModel.addRow(vector);
+
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
     private void loadStock() {
         try {
 
@@ -141,7 +176,6 @@ public class snackbar extends javax.swing.JPanel {
 //            Date end = null;
 //
 //            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
 //            if (jDateChooser2.getDate() != null) {
 //                start = jDateChooser2.getDate();
 //                query += "`snack_stock`.`exp` > '" + format.format(start) + "' AND ";
@@ -151,9 +185,7 @@ public class snackbar extends javax.swing.JPanel {
 //                end = jDateChooser1.getDate();
 //                query += "`snack_stock`.`exp` < '" + format.format(end) + "' ";
 //            }
-
 //            String sort = String.valueOf(jComboBox2.getSelectedItem());
-
 //            query += "ORDER BY ";
 //
 //            query = query.replace("WHERE ORDER BY ", "ORDER BY ");
@@ -184,7 +216,6 @@ public class snackbar extends javax.swing.JPanel {
 //            } else if (sort.equals("Quantity DESC")) {
 //                query += "`snack_stock`.`qty` DESC ";
 //            }
-
             ResultSet resultSet = mySQL.executeSearch(query);
 
             DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
@@ -209,8 +240,7 @@ public class snackbar extends javax.swing.JPanel {
         }
 
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -310,13 +340,12 @@ public class snackbar extends javax.swing.JPanel {
         jPanel91 = new javax.swing.JPanel();
         jPanel114 = new javax.swing.JPanel();
         jTextField17 = new javax.swing.JTextField();
-        jComboBox17 = new javax.swing.JComboBox<>();
         jPanel95 = new javax.swing.JPanel();
         jPanel92 = new javax.swing.JPanel();
         jPanel93 = new javax.swing.JPanel();
         jPanel94 = new javax.swing.JPanel();
-        jScrollPane10 = new javax.swing.JScrollPane();
-        jTable10 = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable5 = new javax.swing.JTable();
         jPanel51 = new javax.swing.JPanel();
         jPanel52 = new javax.swing.JPanel();
         jPanel53 = new javax.swing.JPanel();
@@ -1114,10 +1143,13 @@ public class snackbar extends javax.swing.JPanel {
 
         jPanel114.setPreferredSize(new java.awt.Dimension(400, 35));
         jPanel114.setLayout(new java.awt.GridLayout(1, 0, 5, 5));
-        jPanel114.add(jTextField17);
 
-        jComboBox17.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ASC", "DESC" }));
-        jPanel114.add(jComboBox17);
+        jTextField17.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField17KeyReleased(evt);
+            }
+        });
+        jPanel114.add(jTextField17);
 
         jPanel91.add(jPanel114, java.awt.BorderLayout.LINE_START);
 
@@ -1155,20 +1187,25 @@ public class snackbar extends javax.swing.JPanel {
 
         jPanel94.setLayout(new java.awt.GridLayout(1, 0));
 
-        jTable10.setModel(new javax.swing.table.DefaultTableModel(
+        jTable5.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Product ID", "Name", "Brand", "Quantity", "Buying Price", "Selling Price", "MFD", "EXP"
             }
-        ));
-        jScrollPane10.setViewportView(jTable10);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
 
-        jPanel94.add(jScrollPane10);
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane5.setViewportView(jTable5);
+
+        jPanel94.add(jScrollPane5);
 
         jPanel92.add(jPanel94, java.awt.BorderLayout.CENTER);
 
@@ -1623,6 +1660,12 @@ public class snackbar extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jTable3MouseClicked
 
+    private void jTextField17KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField17KeyReleased
+ 
+        loadGRNItem(jTextField17.getText());
+                                         
+    }//GEN-LAST:event_jTextField17KeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -1634,7 +1677,6 @@ public class snackbar extends javax.swing.JPanel {
     private javax.swing.JComboBox<String> jComboBox14;
     private javax.swing.JComboBox<String> jComboBox15;
     private javax.swing.JComboBox<String> jComboBox16;
-    private javax.swing.JComboBox<String> jComboBox17;
     private javax.swing.JComboBox<String> jComboBox18;
     private javax.swing.JComboBox<String> jComboBox19;
     private javax.swing.JLabel jLabel2;
@@ -1752,17 +1794,17 @@ public class snackbar extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel98;
     private javax.swing.JPanel jPanel99;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable10;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTable5;
     private javax.swing.JTable jTable8;
     private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField15;
@@ -1771,4 +1813,7 @@ public class snackbar extends javax.swing.JPanel {
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField19;
     // End of variables declaration//GEN-END:variables
+
+
+
 }

@@ -29,6 +29,7 @@ public class snackSupplier_view extends javax.swing.JDialog {
         initComponents();
         loardSuppliers("fname", "ASC", "");
         grn = (snack_GRN) parent;
+        reload();
     }
 
     private void loardSuppliers(String column, String orderby, String fname) {
